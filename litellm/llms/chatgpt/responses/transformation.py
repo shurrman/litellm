@@ -95,6 +95,7 @@ class ChatGPTResponsesAPIConfig(OpenAIResponsesAPIConfig):
             include.append("reasoning.encrypted_content")
         request["include"] = include
         request["input"] = self._normalize_function_call_item_ids(request.get("input"))
+        request.pop("previous_response_id", None)
 
         allowed_keys: Final = {
             "model",
@@ -106,7 +107,6 @@ class ChatGPTResponsesAPIConfig(OpenAIResponsesAPIConfig):
             "tools",
             "tool_choice",
             "reasoning",
-            "previous_response_id",
             "truncation",
         }
 
