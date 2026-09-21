@@ -694,10 +694,19 @@ class LiteLLMCompletionStreamingIterator(ResponsesAPIStreamingIterator):
                 annotations=annotations
             )
         )
+        # wsoft fix: this used to be a hardcoded `sequence_number=1`, which made the
+        # message's output_item.done arrive with a *lower* sequence_number than any
+        # tool-call events emitted earlier in the same stream (those use the growing
+        # self._sequence_number counter). Clients that order events by
+        # sequence_number then treat this out-of-order done event as a new item and
+        # re-render the message text a second time. Advancing the shared counter
+        # here keeps sequence_number monotonically increasing across the whole
+        # stream, matching every other event type in this class.
+        self._sequence_number += 1
         return OutputItemDoneEvent(
             type=ResponsesAPIStreamEvents.OUTPUT_ITEM_DONE,
             output_index=0,
-            sequence_number=1,
+            sequence_number=self._sequence_number,
             item=BaseLiteLLMOpenAIResponseObject(
                 **{
                     "id": self._cached_item_id,
