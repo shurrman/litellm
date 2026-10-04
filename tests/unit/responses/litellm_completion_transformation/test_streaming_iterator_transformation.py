@@ -741,7 +741,7 @@ async def test_streaming_response_id_falls_back_when_upstream_yields_nothing():
     assert response_ids[0].startswith("resp_")
 
 
-def _tool_call_chunk(call_id: str, name: str, arguments: str, finish_reason: str | None = None) -> ModelResponseStream:
+def _named_tool_call_chunk(call_id: str, name: str, arguments: str, finish_reason: str | None = None) -> ModelResponseStream:
     return ModelResponseStream(
         id=CHAT_COMPLETION_ID,
         created=1748575031,
@@ -779,7 +779,7 @@ async def test_sequence_numbers_are_monotonic_when_text_precedes_a_tool_call():
     iterator = _build_iterator(
         [
             _chunk("Found it."),
-            _tool_call_chunk("call_1", "list_files", '{"path":"/tmp"}', finish_reason="tool_calls"),
+            _named_tool_call_chunk("call_1", "list_files", '{"path":"/tmp"}', finish_reason="tool_calls"),
         ]
     )
 
