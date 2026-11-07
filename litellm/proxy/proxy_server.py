@@ -7394,6 +7394,8 @@ class ProxyConfig:
 
         Return model info w/ id
         """
+        if model.model_info is None:
+            model.model_info = {}
         _id: Final[str | None] = getattr(model, "model_id", None)
         if _id is not None:
             model.model_info["id"] = _id

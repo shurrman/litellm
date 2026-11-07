@@ -10135,6 +10135,12 @@ class ProviderConfigManager:
             return get_modelscope_image_generation_config(model)
         elif LlmProviders.EDENAI == provider:
             return litellm.EdenAIImageGenerationConfig()
+        elif LlmProviders.CHATGPT == provider:
+            from litellm.llms.chatgpt.image_generation import (
+                get_chatgpt_image_generation_config,
+            )
+
+            return get_chatgpt_image_generation_config(model)
         return None
 
     @staticmethod
@@ -10318,6 +10324,12 @@ class ProviderConfigManager:
             )
 
             return get_openrouter_image_edit_config(model)
+        elif LlmProviders.CHATGPT == provider:
+            from litellm.llms.chatgpt.image_edit import (
+                get_chatgpt_image_edit_config,
+            )
+
+            return get_chatgpt_image_edit_config(model)
         return None
 
     @staticmethod
